@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0dcd9f56-519b-47f3-9fb1-5d69cb11a05d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../DupeFinder" beforeDir="false" afterPath="$PROJECT_DIR$/../DupeFinder" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MonsterGame_advance" beforeDir="false" afterPath="$PROJECT_DIR$/MonsterGame_advance" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MonsterGame_basic" beforeDir="false" afterPath="$PROJECT_DIR$/MonsterGame_basic" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2pz2qYRsi6eE7613j3EVloJ58HK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/mindera/Documents/mindera/2/MonsterGame"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0dcd9f56-519b-47f3-9fb1-5d69cb11a05d" name="Changes" comment="" />
+      <created>1733754774546</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733754774546</updated>
+    </task>
+    <servers />
+  </component>
+</project>
