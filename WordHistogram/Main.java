@@ -1,7 +1,9 @@
 public class Main {
 	public static void main(String[] args) {
 		WordHistogram histogram = new WordHistogram();
-		histogram.analizeString("eu tu eu tu eles aqui");
-		//histogram.get("eu");
+		histogram.analizeString("O Lorem a e Ipsum O qwe Lorem Ipsum O Loremqwe Ipsum O Lqworem qwe Ipsum O Lorem " +
+				"Ipsum ");
+		System.out.println();
+		histogram.get("um");
 	}
 }
