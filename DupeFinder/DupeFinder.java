@@ -20,14 +20,17 @@ public class DupeFinder<E extends Comparable<E>> { //extend to be able to compar
 
 	public List<E> getDupes() {
 		Set<E> uniqueSet = new HashSet<>(fruits);
-		List<E> dupeFruits = new ArrayList<>();
+		//will store only repeated elements
+		List<E> duplicateFruits = new ArrayList<>();
 
 		for (E fruit : uniqueSet) {
+			//check for that unique fruit in bigger collection and if is repeated then pass only repeated to
+			//duplicateFrutis list
 			if (Collections.frequency(fruits, fruit) > 1) {
-				dupeFruits.add(fruit);
+				duplicateFruits.add(fruit);
 			}
 		}
-		return dupeFruits;
+		return duplicateFruits;
 
 	}
 

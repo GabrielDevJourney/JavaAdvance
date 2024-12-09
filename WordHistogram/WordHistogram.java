@@ -5,6 +5,7 @@ public class WordHistogram implements Iterable<String> {
 	HashMap<String, Integer> wordHistogram = new HashMap<String, Integer>();
 	String[] arrayWords;
 
+
 	@Override
 	public Iterator<String> iterator() {
 		return null;
