@@ -3,8 +3,8 @@ package Fruits;
 import java.util.Objects;
 
 public abstract class Fruit implements Comparable<Fruit> {
-	private int acidity;
-	private FruitType type;
+	private final int acidity;
+	private final FruitType type;
 
 	public Fruit(int acidity, FruitType type) {
 		this.acidity = acidity;
@@ -15,7 +15,6 @@ public abstract class Fruit implements Comparable<Fruit> {
 	public int compareTo(Fruit o) {
 		return o.acidity - this.acidity;
 	}
-	//equals override
 
 	@Override
 	public boolean equals(Object o) {
@@ -30,7 +29,6 @@ public abstract class Fruit implements Comparable<Fruit> {
 		return acidity == fruit.acidity && this.type == fruit.type;
 	}
 
-	//hashset override
 	@Override
 	public int hashCode() {
 		return Objects.hash(acidity, type);
@@ -38,6 +36,9 @@ public abstract class Fruit implements Comparable<Fruit> {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " acidity: " + acidity + ", type: " + type;
+		return String.format("%-10s | Acidity: %-3d | Type: %s",
+				getClass().getSimpleName(),
+				acidity,
+				type);
 	}
 }

@@ -19,6 +19,14 @@ public class DupeFinder<E extends Comparable<E>> { //extend to be able to compar
 	}
 
 	public List<E> getDupes() {
+		List<E> duplicateFruits = findDuplicates();
+		for (E fruit : duplicateFruits) {
+			System.out.println(fruit);
+		}
+		return duplicateFruits;
+	}
+
+	private List<E> findDuplicates() {
 		Set<E> uniqueSet = new HashSet<>(fruits);
 		//will store only repeated elements
 		List<E> duplicateFruits = new ArrayList<>();
@@ -31,13 +39,18 @@ public class DupeFinder<E extends Comparable<E>> { //extend to be able to compar
 			}
 		}
 		return duplicateFruits;
-
 	}
 
 	public List<E> sortedDupes() {
-		List<E> list = getDupes();
+		List<E> list = findDuplicates();
 		//this will use sort based on compare to method override
 		Collections.sort(list);
+
+		System.out.println("\nSorted duplicates:");
+		for (E fruit : list) {
+			System.out.println(fruit);
+		}
+
 		return list;
 	}
 }
