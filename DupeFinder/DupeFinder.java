@@ -38,7 +38,6 @@ public class DupeFinder<E extends Comparable<E>> { //extend to be able to compar
 		List<E> list = getDupes();
 		//this will use sort based on compare to method override
 		Collections.sort(list);
-		Collections.reverse(list);
 		return list;
 	}
 }

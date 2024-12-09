@@ -36,8 +36,8 @@ public class Main {
 
 
 		//System.out.println(finder.checkDupes());
-		System.out.println(finder.getDupes());
-		//System.out.println(finder.sortedDupes());
+		//System.out.println(finder.getDupes());
+		System.out.println(finder.sortedDupes());
 
 	}
 }

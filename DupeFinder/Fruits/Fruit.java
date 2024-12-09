@@ -13,7 +13,7 @@ public abstract class Fruit implements Comparable<Fruit> {
 
 	@Override
 	public int compareTo(Fruit o) {
-		return Integer.compare(this.acidity, o.acidity);
+		return o.acidity - this.acidity;
 	}
 	//equals override
 
