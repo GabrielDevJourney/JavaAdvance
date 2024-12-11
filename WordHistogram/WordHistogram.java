@@ -24,11 +24,15 @@ public class WordHistogram implements Iterable<String> {
 		return words.iterator();
 	}
 
+
 	public void analizeString(String text) {
 		//pass every word to array but in lowercase
 		String[] arrayWords = text.toLowerCase().split(" ");
 
 		for (String word : arrayWords) {//will get the closest array possible
+
+			//wordHistogram.put(word, wordHistogram.containsKey(word) ? wordHistogram.get(word) + 1 : 1);
+
 			if (!wordHistogram.containsKey(word)) {
 				wordHistogram.put(word, 1);
 			} else {
