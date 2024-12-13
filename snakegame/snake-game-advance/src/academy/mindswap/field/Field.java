@@ -65,7 +65,7 @@ public final class Field {
         screen.putString(tail.getCol(), tail.getRow(), " ", null, null);
     }
 
-    private static void drawWalls() {
+    public static void drawWalls() {
         for (int i = 0; i < width; i++) {
             screenWriter.drawString(i, 0, BORDER_STRING);
             screenWriter.drawString(i, height - 1, BORDER_STRING);
@@ -82,7 +82,7 @@ public final class Field {
     }
 
     public static void drawFruit(Fruit fruit) {
-        screen.putString(fruit.getPosition().getCol(), fruit.getPosition().getRow(), FRUIT_STRING, Terminal.Color.MAGENTA, null);
+        screen.putString(fruit.getPosition().getCol(), fruit.getPosition().getRow(), FRUIT_STRING, fruit.getColor(), null);
     }
 
     public static int getWidth() {

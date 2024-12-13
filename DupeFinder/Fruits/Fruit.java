@@ -16,6 +16,9 @@ public abstract class Fruit implements Comparable<Fruit> {
 		return o.acidity - this.acidity;
 	}
 
+
+
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -28,6 +31,10 @@ public abstract class Fruit implements Comparable<Fruit> {
 		Fruit fruit = (Fruit) o;
 		return acidity == fruit.acidity && this.type == fruit.type;
 	}
+
+
+
+
 
 	@Override
 	public int hashCode() {

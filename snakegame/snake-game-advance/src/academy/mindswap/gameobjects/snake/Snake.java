@@ -19,10 +19,6 @@ public class Snake {
 		alive = true;
 	}
 
-	public int getSnakeSize() {
-		return body.size();
-	}
-
 	public LinkedList<Position> getFullSnake() {
 		return body;
 	}
@@ -35,8 +31,8 @@ public class Snake {
 		return body.getLast();
 	}
 
-	public Direction getDirection() {
-		return direction;
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 
 	public boolean isAlive() {
@@ -49,9 +45,12 @@ public class Snake {
 		}
 	}
 
-	public void increaseSize() {
+	public void increaseSize(int sizeToGrow) {
 		Position tail = getTail();
-		body.addLast(new Position(tail.getRow(), tail.getCol()));
+		for (int i = 0; i < sizeToGrow; i++) {
+			body.addLast(new Position(tail.getRow(), tail.getCol()));
+
+		}
 	}
 
 	public void move(Direction newDirection) {
@@ -85,8 +84,8 @@ public class Snake {
 
 		direction = newDirection;
 		body.removeLast();
-        body.addFirst(head);
-    }
+		body.addFirst(head);
+	}
 
 	public void move() {
 		move(direction);
