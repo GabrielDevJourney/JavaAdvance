@@ -2,6 +2,7 @@ package academy.mindswap;
 
 import academy.mindswap.field.Field;
 import academy.mindswap.field.Position;
+import academy.mindswap.gameobjects.Obstacle;
 import academy.mindswap.gameobjects.fruit.Fruit;
 import academy.mindswap.gameobjects.fruit.FruitType;
 import academy.mindswap.gameobjects.snake.Direction;
@@ -15,13 +16,15 @@ import java.util.Random;
 
 public class Game {
 
-	private Snake snake;
+	private final Snake snake;
 	private Fruit fruit;
-	private int gameplay_Row;
-	private int gameplay_Col;
+	private final int gameplay_Row;
+	private final int gameplay_Col;
 	private int delay;
 	private final Random random;
 	private List<Position> allPositions;
+	private List<Position> allObstacles = new ArrayList<>();
+	private Obstacle obstacle;
 	public boolean restart = false;
 
 	public Game(int cols, int rows, int delay) {
@@ -44,8 +47,6 @@ public class Game {
 			checkCollisions();
 			Field.clearTail(snake);
 			moveSnake();
-			//after collision draw walls again so they dont disapear
-			Field.drawWalls();
 			Field.drawSnake(snake);
 
 		}
@@ -82,39 +83,65 @@ public class Game {
 		Position head = snake.getHead();
 
 		//border collision
-		if (isBorder(head)) {
-			wrapAround();
-			return;
-		}
+		if (checkWallCollision(head)) return;
 
 		//fruit collision
-		if (fruit.getPosition().equals(snake.getFullSnake().getFirst())) {
-			snake.increaseSize(fruit.getSizeToIncrease());
-			generateFruit();
+		checkFruitCollision();
 
-		}
+		//self collision
+		checkSelfCollision(head);
 
-		if (snake.getFullSnake().subList(1, snake.getFullSnake().size()).contains(head)) {
-			snake.die();
-			endGame();
-			System.out.println("Self collision! Head at row: " + head.getRow() + ", col: " + head.getCol() +
-					" hit body segment");
-		}
+		//obstacle collision
+		checkObstacleCollision(head);
 
 	}
 
+	private boolean checkWallCollision(Position head) {
+		if (isBorder(head)) {
+			wrapAround();
+			return true;
+		}
+		return false;
+	}
+
+	private void checkSelfCollision(Position head) throws InterruptedException {
+		if (snake.getFullSnake().subList(1, snake.getFullSnake().size()).contains(head)) {
+			snake.die();
+			endGame();
+		}
+	}
+
+	private void checkFruitCollision() {
+		if (fruit.getPosition().equals(snake.getFullSnake().getFirst())) {
+			snake.increaseSize(fruit.getSizeToIncrease());
+			delay -= 5;
+			generateFruit();
+			generateObstacle();
+		}
+	}
+
+	private void checkObstacleCollision(Position head) throws InterruptedException {
+		if (allObstacles.contains(head)) {
+			snake.die();
+			endGame();
+		}
+	}
 
 	private int randomNumber(int min, int max) {
 		return random.nextInt(max - min) + min;
 	}
 
 	private void generateFruit() {
+
 		Position position = getRandomAvailablePosition();
+
 		if (position == null) {
 			snake.die();
 			return;
 		}
+
 		FruitType type = generateFruitType();
+
 		fruit = new Fruit(position, type);
 		Field.drawFruit(fruit);
 	}
@@ -145,29 +172,30 @@ public class Game {
 
 	public Position getRandomAvailablePosition() {
 		// Create a new list with current available positions
-		List<Position> currentAvailable = new ArrayList<>(allPositions);
+		List<Position> currentAvailablePositions = new ArrayList<>(allPositions);
 
 		// Remove all snake positions from available positions
-		for (Position snakePos : snake.getFullSnake()) {
-			currentAvailable.removeIf(position -> position.getRow() == snakePos.getRow()
-					&& position.getCol() == snakePos.getCol());
+		for (Position snakePosition : snake.getFullSnake()) {
+			currentAvailablePositions.remove(new Position(snakePosition.getRow(), snakePosition.getCol()));
 		}
 
-		if (currentAvailable.isEmpty()) {
+		if (currentAvailablePositions.isEmpty()) {
 			// Handle the case where no positions are available
 			return null;
 		}
 
 		// Get a random position from available positions
-		int randomIndex = random.nextInt(currentAvailable.size());
-		return currentAvailable.get(randomIndex);
+		int randomIndex = random.nextInt(currentAvailablePositions.size());
+		return currentAvailablePositions.get(randomIndex);
 	}
 
 	public void wrapAround() {
+		Position oldHead = snake.getHead();
+
 		int col;
 		int row;
-		int colPossible = randomNumber(1, gameplay_Col - 1);
-		int rowPossible = randomNumber(1, gameplay_Row - 1);
+		int colPossible = randomNumber(1, gameplay_Col);
+		int rowPossible = randomNumber(1, gameplay_Row);
 		int chooseBorder = randomNumber(1, 4);  // 1-4 for four possible borders
 
 		switch (chooseBorder) {
@@ -201,6 +229,8 @@ public class Game {
 
 		//need to cleat tail like it done in move method otherwise tail trail will be left behind
 		Field.clearTail(snake);
+		Field.clearHead(oldHead);
+
 		Position newHeadPosition = new Position(row, col);
 		snake.getFullSnake().removeFirst();
 		snake.getFullSnake().addFirst(newHeadPosition);
@@ -208,7 +238,7 @@ public class Game {
 	}
 
 	private void endGame() throws InterruptedException {
-		Field.gameoverMessage();
+		Field.gameOverMessage();
 
 		while (true) {
 			Thread.sleep(50);
@@ -216,15 +246,29 @@ public class Game {
 
 			if (k != null) {
 				switch (k.getKind()){
-					case Enter -> {
+					case Enter: {
 						restart = true;
 						return;
 					}
-					case Backspace -> {
+					case Backspace: {
 						Field.closeTerminal();
 					}
 				}
 			}
 		}
+	}
+
+	private void generateObstacle() {
+		Position position = getRandomAvailablePosition();
+
+		if (position == null) {
+			snake.die();
+			return;
+		}
+
+		obstacle = new Obstacle(position);
+		allObstacles.add(obstacle.getPosition());
+		Field.drawObstacle(obstacle);
+
 	}
 }

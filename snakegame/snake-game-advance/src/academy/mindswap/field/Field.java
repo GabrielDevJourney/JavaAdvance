@@ -1,19 +1,21 @@
 package academy.mindswap.field;
 
+import academy.mindswap.gameobjects.Obstacle;
 import academy.mindswap.gameobjects.fruit.Fruit;
 import academy.mindswap.gameobjects.snake.Snake;
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.screen.ScreenWriter;
 import com.googlecode.lanterna.terminal.Terminal;
 
 public final class Field {
 
-    private static final String BORDER_STRING = "▒";
-    private static final String SNAKE_BODY_STRING = "#";
-    private static final String SNAKE_HEAD_STRING = "0";
-    private static final String FRUIT_STRING = "@";
+    private static final String OBSTACLE_STRING = "\u2622";
+    private static final String SNAKE_BODY_STRING = "\u2605";
+    private static final String SNAKE_HEAD_STRING = "\u2666";
+    private static final String FRUIT_STRING = "\uF8FF";
     private static final String[] GAMEOVER_MESSAGE = {
             "  ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  ",
             " ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒",
@@ -48,8 +50,15 @@ public final class Field {
         screen.setCursorPosition(null);
         screen.startScreen();
 
-        drawWalls();
         screen.refresh();
+    }
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getHeight() {
+        return height;
     }
 
     public static void drawSnake(Snake snake) {
@@ -72,45 +81,32 @@ public final class Field {
         screen.refresh();
     }
 
+
+    public static void drawFruit(Fruit fruit) {
+        screen.putString(fruit.getPosition().getCol(), fruit.getPosition().getRow(), FRUIT_STRING, fruit.getColor(), null);
+    }
+
+    public static void drawObstacle(Obstacle obstacle) {
+        screen.putString(obstacle.getPosition().getCol(), obstacle.getPosition().getRow(), OBSTACLE_STRING,
+                Terminal.Color.RED,
+                null);
+    }
+
     public static void clearTail(Snake snake) {
         Position tail = snake.getTail();
         screen.putString(tail.getCol(), tail.getRow(), " ", null, null);
-    }
-
-    public static void drawWalls() {
-        for (int i = 0; i < width; i++) {
-            screenWriter.drawString(i, 0, BORDER_STRING);
-            screenWriter.drawString(i, height - 1, BORDER_STRING);
-        }
-
-        for (int j = 0; j < height; j++) {
-            screenWriter.drawString(0, j, BORDER_STRING);
-            screenWriter.drawString(width - 1, j, BORDER_STRING);
-        }
     }
 
     public static Key readInput() {
         return screen.readInput();
     }
 
-    public static void drawFruit(Fruit fruit) {
-        screen.putString(fruit.getPosition().getCol(), fruit.getPosition().getRow(), FRUIT_STRING, fruit.getColor(), null);
-    }
-
-    public static int getWidth() {
-        return width;
-    }
-
-    public static int getHeight() {
-        return height;
-    }
-
-    public static void gameoverMessage() {
+    public static void gameOverMessage() {
         int startRow = 5;
         int startCol = 10;
 
         for (String line : GAMEOVER_MESSAGE) {
-            screen.putString(startRow, startCol, line, Terminal.Color.RED, null);
+            screen.putString(startRow, startCol, line, Terminal.Color.RED, null, ScreenCharacterStyle.Blinking);
             startRow++;
             startCol++;
         }
@@ -124,5 +120,9 @@ public final class Field {
     public static void closeTerminal(){
         screen.stopScreen();
         System.exit(0);
+    }
+
+    public static void clearHead(Position head) {
+        screen.putString(head.getCol(), head.getRow(), " ", null, null);
     }
 }

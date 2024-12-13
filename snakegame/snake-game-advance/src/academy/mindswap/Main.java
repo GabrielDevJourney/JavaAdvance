@@ -21,4 +21,3 @@ public class Main {
 		}
 	}
 }
-//todo fix message not appearing

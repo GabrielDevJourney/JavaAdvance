@@ -87,8 +87,6 @@ public class Game {
 
 		if (snake.getFullSnake().subList(1, snake.getFullSnake().size()).contains(head)) {
 			snake.die();
-			System.out.println("Self collision! Head at row: " + head.getRow() + ", col: " + head.getCol() +
-					" hit body segment");
 		}
 
 	}

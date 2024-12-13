@@ -4,9 +4,9 @@ import academy.mindswap.field.Position;
 import com.googlecode.lanterna.terminal.Terminal;
 
 public class Fruit {
-    private Position position;
-    private Terminal.Color color;
-    private int sizeToIncrease;
+    private final Position position;
+    private final Terminal.Color color;
+    private final int sizeToIncrease;
 
 
     public Fruit(Position position, FruitType type) {

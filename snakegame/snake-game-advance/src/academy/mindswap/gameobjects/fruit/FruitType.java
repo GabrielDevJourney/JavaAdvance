@@ -3,12 +3,12 @@ package academy.mindswap.gameobjects.fruit;
 import com.googlecode.lanterna.terminal.Terminal;
 
 public enum FruitType {
-	NORMAL(1, Terminal.Color.RED),
-	DOUBLESIZE(2, Terminal.Color.BLUE),
+	NORMAL(1, Terminal.Color.MAGENTA),
+	DOUBLESIZE(2, Terminal.Color.GREEN),
 	SUPERSIZE(5, Terminal.Color.YELLOW);
 
-	private int increaseSize;
-	private Terminal.Color color;
+	private final int increaseSize;
+	private final Terminal.Color color;
 
 	FruitType(int increaseSize,Terminal.Color color) {
 		this.increaseSize = increaseSize;
