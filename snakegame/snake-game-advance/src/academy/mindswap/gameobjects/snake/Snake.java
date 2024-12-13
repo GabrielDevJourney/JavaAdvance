@@ -39,6 +39,10 @@ public class Snake {
 		return alive;
 	}
 
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
 	private void initSnakeInitialSize() {
 		for (int i = 0; i < SNAKE_INITIAL_SIZE; i++) {
 			body.add(new Position(4, i + 20));

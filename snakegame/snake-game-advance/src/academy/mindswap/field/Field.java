@@ -14,6 +14,18 @@ public final class Field {
     private static final String SNAKE_BODY_STRING = "#";
     private static final String SNAKE_HEAD_STRING = "0";
     private static final String FRUIT_STRING = "@";
+    private static final String[] GAMEOVER_MESSAGE = {
+            "  ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  ",
+            " ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒",
+            "▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒",
+            "░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄  ",
+            "░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒",
+            " ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░",
+            "  ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░",
+            "",
+            "                      Press ENTER to Start a New Game",
+            "                           Backspace to Exit Game"
+    };
 
     private static int width;
     private static int height;
@@ -91,5 +103,26 @@ public final class Field {
 
     public static int getHeight() {
         return height;
+    }
+
+    public static void gameoverMessage() {
+        int startRow = 5;
+        int startCol = 10;
+
+        for (String line : GAMEOVER_MESSAGE) {
+            screen.putString(startRow, startCol, line, Terminal.Color.RED, null);
+            startRow++;
+            startCol++;
+        }
+        screen.refresh();
+    }
+
+    public static void stopScreen(){
+        screen.stopScreen();
+    }
+
+    public static void closeTerminal(){
+        screen.stopScreen();
+        System.exit(0);
     }
 }

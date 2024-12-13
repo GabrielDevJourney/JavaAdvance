@@ -8,7 +8,6 @@ import academy.mindswap.gameobjects.snake.Direction;
 import academy.mindswap.gameobjects.snake.Snake;
 import com.googlecode.lanterna.input.Key;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -23,6 +22,7 @@ public class Game {
 	private int delay;
 	private final Random random;
 	private List<Position> allPositions;
+	public boolean restart = false;
 
 	public Game(int cols, int rows, int delay) {
 		Field.init(cols, rows);
@@ -49,6 +49,7 @@ public class Game {
 			Field.drawSnake(snake);
 
 		}
+
 	}
 
 	private void moveSnake() {
@@ -77,7 +78,7 @@ public class Game {
 		snake.move();
 	}
 
-	private void checkCollisions() {
+	private void checkCollisions() throws InterruptedException {
 		Position head = snake.getHead();
 
 		//border collision
@@ -95,6 +96,7 @@ public class Game {
 
 		if (snake.getFullSnake().subList(1, snake.getFullSnake().size()).contains(head)) {
 			snake.die();
+			endGame();
 			System.out.println("Self collision! Head at row: " + head.getRow() + ", col: " + head.getCol() +
 					" hit body segment");
 		}
@@ -161,14 +163,14 @@ public class Game {
 		return currentAvailable.get(randomIndex);
 	}
 
-	public void wrapAround(){
+	public void wrapAround() {
 		int col;
 		int row;
 		int colPossible = randomNumber(1, gameplay_Col - 1);
 		int rowPossible = randomNumber(1, gameplay_Row - 1);
 		int chooseBorder = randomNumber(1, 4);  // 1-4 for four possible borders
 
-		switch(chooseBorder) {
+		switch (chooseBorder) {
 			case 1:  // Top border
 				row = 0;
 				col = colPossible;
@@ -199,9 +201,30 @@ public class Game {
 
 		//need to cleat tail like it done in move method otherwise tail trail will be left behind
 		Field.clearTail(snake);
-		Position newHeadPosition = new Position(row,col);
+		Position newHeadPosition = new Position(row, col);
 		snake.getFullSnake().removeFirst();
 		snake.getFullSnake().addFirst(newHeadPosition);
 		Field.drawSnake(snake);
+	}
+
+	private void endGame() throws InterruptedException {
+		Field.gameoverMessage();
+
+		while (true) {
+			Thread.sleep(50);
+			Key k = Field.readInput();
+
+			if (k != null) {
+				switch (k.getKind()){
+					case Enter -> {
+						restart = true;
+						return;
+					}
+					case Backspace -> {
+						Field.closeTerminal();
+					}
+				}
+			}
+		}
 	}
 }
