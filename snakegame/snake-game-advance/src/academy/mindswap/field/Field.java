@@ -1,6 +1,6 @@
 package academy.mindswap.field;
 
-import academy.mindswap.gameobjects.Obstacle;
+import academy.mindswap.gameobjects.Obstacle.Obstacle;
 import academy.mindswap.gameobjects.fruit.Fruit;
 import academy.mindswap.gameobjects.snake.Snake;
 import com.googlecode.lanterna.TerminalFacade;
@@ -12,9 +12,10 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 public final class Field {
 
-    private static final String OBSTACLE_STRING = "\u2622";
     private static final String SNAKE_BODY_STRING = "\u2605";
     private static final String SNAKE_HEAD_STRING = "\u2666";
+    private static final String INVIIBLE_SNAKE_BODY_STRING = " ";
+    private static final String INVISIBLE_SNAKE_HEAD_STRING = " ";
     private static final String FRUIT_STRING = "\uF8FF";
     private static final String[] GAMEOVER_MESSAGE = {
             "  ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  ",
@@ -63,6 +64,10 @@ public final class Field {
 
     public static void drawSnake(Snake snake) {
 
+        if (snake.isIsvisible()) {
+            return;
+        }
+
         Terminal.Color snakeColor = Terminal.Color.GREEN;
 
         if (!snake.isAlive()){
@@ -87,15 +92,15 @@ public final class Field {
     }
 
     public static void drawObstacle(Obstacle obstacle) {
-        screen.putString(obstacle.getPosition().getCol(), obstacle.getPosition().getRow(), OBSTACLE_STRING,
-                Terminal.Color.RED,
+        screen.putString(obstacle.getPosition().getCol(), obstacle.getPosition().getRow(), obstacle.getObstacleSymbol(),
+                obstacle.getColor(),
                 null);
     }
 
-    public static void clearTail(Snake snake) {
-        Position tail = snake.getTail();
-        screen.putString(tail.getCol(), tail.getRow(), " ", null, null);
+    public static void clearTail(Position position) {
+        screen.putString(position.getCol(), position.getRow(), " ", null, null);
     }
+
 
     public static Key readInput() {
         return screen.readInput();

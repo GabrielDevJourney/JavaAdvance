@@ -1,5 +1,7 @@
 package academy.mindswap.field;
 
+import java.util.Objects;
+
 public class Position {
 
     private int row;
@@ -25,5 +27,15 @@ public class Position {
             result = (getRow() == position.getRow() && getCol() == position.getCol());
         }
 	    return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, col);
+    }
+
+    @Override
+    public String toString() {
+        return "Position{row=" + row + ", col=" + col + "}";
     }
 }

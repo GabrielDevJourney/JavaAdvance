@@ -1,5 +1,6 @@
 package academy.mindswap.gameobjects.snake;
 
+import academy.mindswap.field.Field;
 import academy.mindswap.field.Position;
 
 import java.util.LinkedList;
@@ -11,6 +12,8 @@ public class Snake {
 	private boolean alive;
 	//instead of having more variables i can use whole body to get both head last position and tail first one
 	private LinkedList<Position> body;
+	private boolean isIsvisible;
+	private long endInvisibleTime = 0;
 
 	public Snake(Direction direction) {
 		this.body = new LinkedList<>();
@@ -21,6 +24,10 @@ public class Snake {
 
 	public LinkedList<Position> getFullSnake() {
 		return body;
+	}
+
+	public long getEndInvisibleTime() {
+		return endInvisibleTime;
 	}
 
 	public Position getHead() {
@@ -35,12 +42,24 @@ public class Snake {
 		this.direction = direction;
 	}
 
+	public void setEndInvisibleTime(long endInvisibleTime) {
+		this.endInvisibleTime = endInvisibleTime;
+	}
+
 	public boolean isAlive() {
 		return alive;
 	}
 
 	public void setAlive(boolean alive) {
 		this.alive = alive;
+	}
+
+	public boolean isIsvisible() {
+		return isIsvisible;
+	}
+
+	public void setIsvisible(boolean isvisible) {
+		isIsvisible = isvisible;
 	}
 
 	private void initSnakeInitialSize() {
@@ -54,6 +73,16 @@ public class Snake {
 		for (int i = 0; i < sizeToGrow; i++) {
 			body.addLast(new Position(tail.getRow(), tail.getCol()));
 
+		}
+	}
+
+	public void decreaseSize(int sizeToShrink) {
+		for (int i = 0; i < sizeToShrink; i++) {
+			if (body.size() > 1) {
+
+				Position positionToClear = body.removeLast();
+				Field.clearTail(positionToClear);
+			}
 		}
 	}
 
@@ -97,7 +126,11 @@ public class Snake {
 
 	public void die() {
 		alive = false;
-		System.out.println("Snake died!");
+	}
+
+	public void startInvisibility(int durationInSeconds) {
+		this.isIsvisible = true;  // Make snake invisible
+		this.endInvisibleTime = System.currentTimeMillis() + (durationInSeconds * 1000);
 	}
 
 }

@@ -2,16 +2,15 @@ package academy.mindswap;
 
 import academy.mindswap.field.Field;
 import academy.mindswap.field.Position;
-import academy.mindswap.gameobjects.Obstacle;
+import academy.mindswap.gameobjects.Obstacle.Obstacle;
+import academy.mindswap.gameobjects.Obstacle.ObstacleType;
 import academy.mindswap.gameobjects.fruit.Fruit;
 import academy.mindswap.gameobjects.fruit.FruitType;
 import academy.mindswap.gameobjects.snake.Direction;
 import academy.mindswap.gameobjects.snake.Snake;
 import com.googlecode.lanterna.input.Key;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class Game {
@@ -23,7 +22,7 @@ public class Game {
 	private int delay;
 	private final Random random;
 	private List<Position> allPositions;
-	private List<Position> allObstacles = new ArrayList<>();
+	private Map<Position, Obstacle> allObstacles = new HashMap<>();
 	private Obstacle obstacle;
 	public boolean restart = false;
 
@@ -38,19 +37,54 @@ public class Game {
 		populateListOfAllPositions();
 	}
 
+	public Position getRandomAvailablePosition() {
+		// Create a new list with current available positions
+		List<Position> currentAvailablePositions = new ArrayList<>(allPositions);
+
+		// Remove all snake positions from available positions
+		for (Position snakePosition : snake.getFullSnake()) {
+			currentAvailablePositions.remove(new Position(snakePosition.getRow(), snakePosition.getCol()));
+		}
+
+		if (currentAvailablePositions.isEmpty()) {
+			// Handle the case where no positions are available
+			return null;
+		}
+
+		// Get a random position from available positions
+		int randomIndex = random.nextInt(currentAvailablePositions.size());
+		return currentAvailablePositions.get(randomIndex);
+	}
+
+	private boolean isBorder(Position position) {
+		return position.getRow() == 0 || position.getRow() == gameplay_Row || position.getCol() == 0 || position.getCol() == gameplay_Col;
+	}
+
+
+	//* ALL GAME LOGIC MEHODS *//
+
 	public void start() throws InterruptedException {
 
 		generateFruit();
 
 		while (snake.isAlive()) {
 			Thread.sleep(delay);
+
+			handleInvisiblility();
+
 			checkCollisions();
-			Field.clearTail(snake);
+			Field.clearTail(snake.getTail());
 			moveSnake();
 			Field.drawSnake(snake);
 
 		}
 
+	}
+
+	private void handleInvisiblility() {
+		if (snake.isIsvisible() && System.currentTimeMillis() > snake.getEndInvisibleTime()) {
+			snake.setIsvisible(false);
+		}
 	}
 
 	private void moveSnake() {
@@ -80,6 +114,8 @@ public class Game {
 	}
 
 	private void checkCollisions() throws InterruptedException {
+		System.out.println("Checking collisions...");
+
 		Position head = snake.getHead();
 
 		//border collision
@@ -121,14 +157,46 @@ public class Game {
 	}
 
 	private void checkObstacleCollision(Position head) throws InterruptedException {
-		if (allObstacles.contains(head)) {
-			snake.die();
-			endGame();
+		Obstacle obstacle = allObstacles.get(head);
+
+		if (obstacle != null) {
+			ObstacleType obstacleType = obstacle.getType();
+			switch (obstacleType) {
+				case INVISIBLESNAKE:
+					invisibleSnake(obstacleType);
+					System.out.println("Snake became invisible");
+					break;
+				case DEACREASESIZE:
+					deceraseSize(obstacleType);
+					System.out.println("Snake size decreased");
+					break;
+				case INSTANTDEATH:
+					instantDeath();
+					System.out.println("Snake died instantly");
+					break;
+			}
+			allObstacles.remove(head);
 		}
 	}
 
+
 	private int randomNumber(int min, int max) {
 		return random.nextInt(max - min) + min;
+	}
+
+	private void invisibleSnake(ObstacleType type) {
+		//todo handle snake last drawing being showed so need to clear full body from the postion where the
+		// invisiblity was turn on
+		snake.startInvisibility(type.getTimeIvisible());
+	}
+
+	private void instantDeath() throws InterruptedException {
+		snake.die();
+		endGame();
+	}
+
+	private void deceraseSize(ObstacleType type) {
+		snake.decreaseSize(type.getDecreaseSize());
 	}
 
 	private void generateFruit() {
@@ -146,20 +214,6 @@ public class Game {
 		Field.drawFruit(fruit);
 	}
 
-	private boolean isBorder(Position position) {
-		return position.getRow() == 0 || position.getRow() == gameplay_Row || position.getCol() == 0 || position.getCol() == gameplay_Col;
-	}
-
-	private void populateListOfAllPositions() {
-		allPositions = new ArrayList<>();
-		//will not allow spawns in "boarder" even tho game will be warp-around
-		for (int row = 1; row < gameplay_Row; row++) {
-			for (int col = 1; col < gameplay_Col; col++) {
-				allPositions.add(new Position(row, col));
-			}
-		}
-	}
-
 	public FruitType generateFruitType() {
 		int change = randomNumber(1, 100);
 		if (change <= 50) {
@@ -170,23 +224,41 @@ public class Game {
 		return FruitType.SUPERSIZE;
 	}
 
-	public Position getRandomAvailablePosition() {
-		// Create a new list with current available positions
-		List<Position> currentAvailablePositions = new ArrayList<>(allPositions);
+	private ObstacleType generateObstacleType() {
+		int change = randomNumber(1, 100);
+		if (change <= 50) {
+			return ObstacleType.DEACREASESIZE;
+		} else if (change <= 75) {
+			return ObstacleType.INVISIBLESNAKE;
+		}
+		return ObstacleType.INSTANTDEATH;
+	}
 
-		// Remove all snake positions from available positions
-		for (Position snakePosition : snake.getFullSnake()) {
-			currentAvailablePositions.remove(new Position(snakePosition.getRow(), snakePosition.getCol()));
+	private void generateObstacle() {
+		Position position = getRandomAvailablePosition();
+
+		if (position == null) {
+			snake.die();
+			return;
 		}
 
-		if (currentAvailablePositions.isEmpty()) {
-			// Handle the case where no positions are available
-			return null;
-		}
+		ObstacleType type = generateObstacleType();
 
-		// Get a random position from available positions
-		int randomIndex = random.nextInt(currentAvailablePositions.size());
-		return currentAvailablePositions.get(randomIndex);
+		obstacle = new Obstacle(position, type);
+		allObstacles.put(obstacle.getPosition(), obstacle);
+		Field.drawObstacle(obstacle);
+		System.out.println("Generated obstacle at: " + position + " of type: " + type);
+
+	}
+
+	private void populateListOfAllPositions() {
+		allPositions = new ArrayList<>();
+		//will not allow spawns in "boarder" even tho game will be warp-around
+		for (int row = 1; row < gameplay_Row; row++) {
+			for (int col = 1; col < gameplay_Col; col++) {
+				allPositions.add(new Position(row, col));
+			}
+		}
 	}
 
 	public void wrapAround() {
@@ -228,7 +300,7 @@ public class Game {
 		System.out.println(row + " " + col);
 
 		//need to cleat tail like it done in move method otherwise tail trail will be left behind
-		Field.clearTail(snake);
+		Field.clearTail(snake.getTail());
 		Field.clearHead(oldHead);
 
 		Position newHeadPosition = new Position(row, col);
@@ -245,7 +317,7 @@ public class Game {
 			Key k = Field.readInput();
 
 			if (k != null) {
-				switch (k.getKind()){
+				switch (k.getKind()) {
 					case Enter: {
 						restart = true;
 						return;
@@ -258,17 +330,4 @@ public class Game {
 		}
 	}
 
-	private void generateObstacle() {
-		Position position = getRandomAvailablePosition();
-
-		if (position == null) {
-			snake.die();
-			return;
-		}
-
-		obstacle = new Obstacle(position);
-		allObstacles.add(obstacle.getPosition());
-		Field.drawObstacle(obstacle);
-
-	}
 }
