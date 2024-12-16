@@ -65,6 +65,9 @@ public class Game {
 
 	public void start() throws InterruptedException {
 
+		Field.gameMenu();
+		Field.clearScreen();
+
 		generateFruit();
 
 		while (snake.isAlive()) {
@@ -78,7 +81,6 @@ public class Game {
 			Field.drawSnake(snake);
 
 		}
-
 	}
 
 	private void handleInvisiblility() {
