@@ -73,7 +73,7 @@ public class Game {
 			handleInvisiblility();
 
 			checkCollisions();
-			Field.clearTail(snake.getTail());
+			Field.clearPosition(snake.getTail());
 			moveSnake();
 			Field.drawSnake(snake);
 
@@ -185,9 +185,10 @@ public class Game {
 	}
 
 	private void invisibleSnake(ObstacleType type) {
-		//todo handle snake last drawing being showed so need to clear full body from the postion where the
-		// invisiblity was turn on
 		snake.startInvisibility(type.getTimeIvisible());
+		for (Position position : snake.getFullSnake()) {
+			Field.clearPosition(position);
+		}
 	}
 
 	private void instantDeath() throws InterruptedException {
@@ -300,7 +301,7 @@ public class Game {
 		System.out.println(row + " " + col);
 
 		//need to cleat tail like it done in move method otherwise tail trail will be left behind
-		Field.clearTail(snake.getTail());
+		Field.clearPosition(snake.getTail());
 		Field.clearHead(oldHead);
 
 		Position newHeadPosition = new Position(row, col);

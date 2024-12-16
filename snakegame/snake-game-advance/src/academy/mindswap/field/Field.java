@@ -97,8 +97,9 @@ public final class Field {
                 null);
     }
 
-    public static void clearTail(Position position) {
+    public static void clearPosition(Position position) {
         screen.putString(position.getCol(), position.getRow(), " ", null, null);
+        screen.refresh();
     }
 
 

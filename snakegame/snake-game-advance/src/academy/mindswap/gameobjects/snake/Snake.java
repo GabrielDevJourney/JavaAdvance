@@ -81,7 +81,7 @@ public class Snake {
 			if (body.size() > 1) {
 
 				Position positionToClear = body.removeLast();
-				Field.clearTail(positionToClear);
+				Field.clearPosition(positionToClear);
 			}
 		}
 	}
