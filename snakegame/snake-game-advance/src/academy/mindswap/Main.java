@@ -20,6 +20,4 @@ public class Main {
 			}
 		}
 	}
-
-	//todo create menu to explain fruits and objects and borders not killing snake
 }

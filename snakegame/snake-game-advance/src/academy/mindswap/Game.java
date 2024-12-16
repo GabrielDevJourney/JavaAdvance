@@ -116,8 +116,6 @@ public class Game {
 	}
 
 	private void checkCollisions() throws InterruptedException {
-		System.out.println("Checking collisions...");
-
 		Position head = snake.getHead();
 
 		//border collision
@@ -250,7 +248,6 @@ public class Game {
 		obstacle = new Obstacle(position, type);
 		allObstacles.put(obstacle.getPosition(), obstacle);
 		Field.drawObstacle(obstacle);
-		System.out.println("Generated obstacle at: " + position + " of type: " + type);
 
 	}
 
