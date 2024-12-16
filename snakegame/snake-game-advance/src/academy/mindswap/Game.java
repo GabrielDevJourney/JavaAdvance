@@ -24,7 +24,8 @@ public class Game {
 	private List<Position> allPositions;
 	private Map<Position, Obstacle> allObstacles = new HashMap<>();
 	private Obstacle obstacle;
-	public boolean restart = false;
+	public boolean restart;
+	private boolean isPause = false;
 
 	public Game(int cols, int rows, int delay) {
 		Field.init(cols, rows);
@@ -73,12 +74,18 @@ public class Game {
 		while (snake.isAlive()) {
 			Thread.sleep(delay);
 
+			pauseGame();
+			//skip all method when game is at pause
+			if (isPause) continue;
+
 			handleInvisiblility();
 
 			checkCollisions();
 			Field.clearPosition(snake.getTail());
+
 			moveSnake();
 			Field.drawSnake(snake);
+
 
 		}
 	}
@@ -329,5 +336,36 @@ public class Game {
 			}
 		}
 	}
+
+
+	private void pauseGame() throws InterruptedException {
+		Key k = Field.readInput();
+
+		if (k != null) {
+			if (k.getKind() == Key.Kind.NormalKey && (k.getCharacter() == 'P' || k.getCharacter() == 'p')) {
+
+				isPause = true;
+				handleGameBeingPaused();
+
+			}
+		}
+	}
+
+	private void handleGameBeingPaused() throws InterruptedException {
+		while (isPause) {
+			Thread.sleep(50);
+			Key resume = Field.readInput();
+			handleResumeKeyPress(resume);
+		}
+	}
+
+	private void handleResumeKeyPress(Key resume) {
+		if (resume != null &&
+				resume.getKind() == Key.Kind.NormalKey &&
+				(resume.getCharacter() == 'P' || resume.getCharacter() == 'p')) {
+			isPause = false;
+		}
+	}
+
 
 }

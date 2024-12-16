@@ -175,6 +175,7 @@ public final class Field {
         screen.putString(startCol, startRow++, "SPECIAL FEATURES:", Terminal.Color.GREEN, null);
         screen.putString(startCol, startRow++, "  • Snake wraps around borders", TEXT_MENU_COLOR, null);
         screen.putString(startCol, startRow++, "  • Game speed increases with each fruit eaten", TEXT_MENU_COLOR, null);
+        screen.putString(startCol, startRow++, "  • To pause game press key P", TEXT_MENU_COLOR, null);
         startRow++;  // Empty line
 
         screen.putString(startCol, startRow++, "                     Press any key to start the game!                    ", Terminal.Color.GREEN, null);
