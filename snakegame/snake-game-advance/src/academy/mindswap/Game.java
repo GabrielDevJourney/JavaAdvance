@@ -74,9 +74,6 @@ public class Game {
 		while (snake.isAlive()) {
 			Thread.sleep(delay);
 
-			pauseGame();
-			if (isPause) continue;
-
 			handleInvisiblility();
 
 			checkCollisions();
@@ -94,29 +91,37 @@ public class Game {
 	}
 
 	private void moveSnake() {
-
 		Key k = Field.readInput();
 
 		if (k != null) {
-			switch (k.getKind()) {
-				case ArrowUp:
-					snake.move(Direction.UP);
-					return;
+			// Handle pause first if true simply skip moving logic
+			if (k.getKind() == Key.Kind.NormalKey &&
+					(k.getCharacter() == 'P' || k.getCharacter() == 'p')) {
+				isPause = !isPause;
+				return;
+			}
 
-				case ArrowDown:
-					snake.move(Direction.DOWN);
-					return;
-
-				case ArrowLeft:
-					snake.move(Direction.LEFT);
-					return;
-
-				case ArrowRight:
-					snake.move(Direction.RIGHT);
-					return;
+			// Handle movement if not paused
+			if (!isPause) {
+				switch (k.getKind()) {
+					case ArrowUp:
+						snake.move(Direction.UP);
+						return;
+					case ArrowDown:
+						snake.move(Direction.DOWN);
+						return;
+					case ArrowLeft:
+						snake.move(Direction.LEFT);
+						return;
+					case ArrowRight:
+						snake.move(Direction.RIGHT);
+						return;
+				}
 			}
 		}
-		snake.move();
+		if (!isPause) {
+			snake.move();
+		}
 	}
 
 	private void checkCollisions() throws InterruptedException {
@@ -334,33 +339,4 @@ public class Game {
 		}
 	}
 
-
-	private void pauseGame() throws InterruptedException {
-		Key k = Field.readInput();
-
-		if (k != null) {
-			if (k.getKind() == Key.Kind.NormalKey && (k.getCharacter() == 'P' || k.getCharacter() == 'p')) {
-
-				isPause = true;
-				handleGameBeingPaused();
-
-			}
-		}
-	}
-
-	private void handleGameBeingPaused() throws InterruptedException {
-		while (isPause) {
-			Thread.sleep(50);
-			Key resume = Field.readInput();
-			handleResumeKeyPress(resume);
-		}
-	}
-
-	private void handleResumeKeyPress(Key resume) {
-		if (resume != null &&
-				resume.getKind() == Key.Kind.NormalKey &&
-				(resume.getCharacter() == 'P' || resume.getCharacter() == 'p')) {
-			isPause = false;
-		}
-	}
 }
