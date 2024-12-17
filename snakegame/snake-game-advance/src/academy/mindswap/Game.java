@@ -75,7 +75,6 @@ public class Game {
 			Thread.sleep(delay);
 
 			pauseGame();
-			//skip all method when game is at pause
 			if (isPause) continue;
 
 			handleInvisiblility();
@@ -85,8 +84,6 @@ public class Game {
 
 			moveSnake();
 			Field.drawSnake(snake);
-
-
 		}
 	}
 
@@ -366,6 +363,4 @@ public class Game {
 			isPause = false;
 		}
 	}
-
-
 }
