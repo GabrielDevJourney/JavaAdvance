@@ -17,12 +17,14 @@ public class Game {
 
 	private final Snake snake;
 	private Fruit fruit;
-	private final int gameplay_Row;
-	private final int gameplay_Col;
+	private final int GAME_AVAILABLE_HEIGHT = Field.getHeight() - 1;
+	private final int GAME_AVAILABLE_WIDTH = Field.getWidth() - 1;
+	private final int CHANGE_50 = 50;
+	private final int CHANGE_75 = 75;
 	private int delay;
 	private final Random random;
 	private List<Position> allPositions;
-	private Map<Position, Obstacle> allObstacles = new HashMap<>();
+	private final Map<Position, Obstacle> allObstacles = new HashMap<>();
 	private Obstacle obstacle;
 	public boolean restart;
 	private boolean isPause = false;
@@ -32,9 +34,6 @@ public class Game {
 		snake = new Snake(Direction.LEFT);
 		this.delay = delay;
 		random = new Random();
-		//othewise my limits of game will be outside of game setting it to -1
-		gameplay_Row = Field.getHeight() - 1;
-		gameplay_Col = Field.getWidth() - 1;
 		populateListOfAllPositions();
 	}
 
@@ -58,11 +57,11 @@ public class Game {
 	}
 
 	private boolean isBorder(Position position) {
-		return position.getRow() == 0 || position.getRow() == gameplay_Row || position.getCol() == 0 || position.getCol() == gameplay_Col;
+		return position.getRow() == 0 || position.getRow() == GAME_AVAILABLE_HEIGHT || position.getCol() == 0 || position.getCol() == GAME_AVAILABLE_WIDTH;
 	}
 
 
-	//* ALL GAME LOGIC MEHODS *//
+	//* ALL GAME LOGIC METHODS *//
 
 	public void start() throws InterruptedException {
 
@@ -91,19 +90,19 @@ public class Game {
 	}
 
 	private void moveSnake() {
-		Key k = Field.readInput();
+		Key userInput = Field.readInput();
 
-		if (k != null) {
+		if (userInput != null) {
 			// Handle pause first if true simply skip moving logic
-			if (k.getKind() == Key.Kind.NormalKey &&
-					(k.getCharacter() == 'P' || k.getCharacter() == 'p')) {
+			if (userInput.getKind() == Key.Kind.NormalKey &&
+					(userInput.getCharacter() == 'P' || userInput.getCharacter() == 'p')) {
 				isPause = !isPause;
 				return;
 			}
 
 			// Handle movement if not paused
 			if (!isPause) {
-				switch (k.getKind()) {
+				switch (userInput.getKind()) {
 					case ArrowUp:
 						snake.move(Direction.UP);
 						return;
@@ -226,9 +225,10 @@ public class Game {
 
 	public FruitType generateFruitType() {
 		int change = randomNumber(1, 100);
-		if (change <= 50) {
+
+		if (change <= CHANGE_50) {
 			return FruitType.NORMAL;
-		} else if (change <= 75) {
+		} else if (change <= CHANGE_75) {
 			return FruitType.DOUBLESIZE;
 		}
 		return FruitType.SUPERSIZE;
@@ -236,9 +236,10 @@ public class Game {
 
 	private ObstacleType generateObstacleType() {
 		int change = randomNumber(1, 100);
-		if (change <= 50) {
+
+		if (change <= CHANGE_50) {
 			return ObstacleType.DEACREASESIZE;
-		} else if (change <= 75) {
+		} else if (change <= CHANGE_75) {
 			return ObstacleType.INVISIBLESNAKE;
 		}
 		return ObstacleType.INSTANTDEATH;
@@ -263,8 +264,8 @@ public class Game {
 	private void populateListOfAllPositions() {
 		allPositions = new ArrayList<>();
 		//will not allow spawns in "boarder" even tho game will be warp-around
-		for (int row = 1; row < gameplay_Row; row++) {
-			for (int col = 1; col < gameplay_Col; col++) {
+		for (int row = 1; row < GAME_AVAILABLE_HEIGHT; row++) {
+			for (int col = 1; col < GAME_AVAILABLE_WIDTH; col++) {
 				allPositions.add(new Position(row, col));
 			}
 		}
@@ -275,8 +276,8 @@ public class Game {
 
 		int col;
 		int row;
-		int colPossible = randomNumber(1, gameplay_Col);
-		int rowPossible = randomNumber(1, gameplay_Row);
+		int colPossible = randomNumber(1, GAME_AVAILABLE_WIDTH);
+		int rowPossible = randomNumber(1, GAME_AVAILABLE_HEIGHT);
 		int chooseBorder = randomNumber(1, 4);  // 1-4 for four possible borders
 
 		switch (chooseBorder) {
@@ -289,7 +290,7 @@ public class Game {
 				snake.setDirection(Direction.DOWN);
 				break;
 			case 2:  // Bottom border
-				row = gameplay_Row;
+				row = GAME_AVAILABLE_HEIGHT;
 				col = colPossible;
 				snake.setDirection(Direction.UP);
 
@@ -301,7 +302,7 @@ public class Game {
 				break;
 			default:  // Right border
 				row = rowPossible;
-				col = gameplay_Col;
+				col = GAME_AVAILABLE_WIDTH;
 				snake.setDirection(Direction.LEFT);
 				break;
 		}
@@ -323,10 +324,10 @@ public class Game {
 
 		while (true) {
 			Thread.sleep(50);
-			Key k = Field.readInput();
+			Key userInput = Field.readInput();
 
-			if (k != null) {
-				switch (k.getKind()) {
+			if (userInput != null) {
+				switch (userInput.getKind()) {
 					case Enter: {
 						restart = true;
 						return;

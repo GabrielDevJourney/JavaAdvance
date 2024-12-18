@@ -1,8 +1,9 @@
 package academy.mindswap.gameobjects.Obstacle;
 
+import academy.mindswap.Generatable;
 import com.googlecode.lanterna.terminal.Terminal;
 
-public enum ObstacleType {
+public enum ObstacleType implements Generatable {
 	INSTANTDEATH(0, false, 0, Terminal.Color.RED),
 	DEACREASESIZE(2, false, 0, Terminal.Color.WHITE),
 	INVISIBLESNAKE(0, true, 1, Terminal.Color.BLUE);

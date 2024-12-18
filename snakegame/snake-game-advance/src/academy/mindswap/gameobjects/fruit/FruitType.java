@@ -1,8 +1,9 @@
 package academy.mindswap.gameobjects.fruit;
 
+import academy.mindswap.Generatable;
 import com.googlecode.lanterna.terminal.Terminal;
 
-public enum FruitType {
+public enum FruitType implements Generatable {
 	NORMAL(1, Terminal.Color.MAGENTA),
 	DOUBLESIZE(2, Terminal.Color.GREEN),
 	SUPERSIZE(5, Terminal.Color.YELLOW);

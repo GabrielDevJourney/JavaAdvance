@@ -6,8 +6,12 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		int gameWidth = 100;
+		int gameHeight = 30;
+		int delay = 100;
+
 		while (true) {
-			Game game = new Game(100, 30, 100);
+			Game game = new Game(gameHeight, gameWidth, delay);
 			try {
 				game.start();
 				if(!game.restart){
