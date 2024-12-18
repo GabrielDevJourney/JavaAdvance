@@ -24,19 +24,16 @@ public class Analyzer {
 	public void oldestEmployee(Department department) {
 		Stream<Employee> employeeStream = department.getEmployees().stream();
 
-		Optional<Employee> oldestEmployee = employeeStream.max(Comparator.comparing(Employee::getAge));
-
-		oldestEmployee.ifPresent(employee -> System.out.println(employee.getName()));
+		employeeStream.max(Comparator.comparing(Employee::getAge))
+				.ifPresent(employee -> System.out.println(employee.getName()));
 	}
 
 	public void firstEmployeeOver35(Department department) {
 		Stream<Employee> employeeStream = department.getEmployees().stream();
 
-		Optional<Employee> firstEmployeeOver35 = employeeStream.filter(employee -> employee.getAge() > 35)
-				.findFirst();
-
-		firstEmployeeOver35.ifPresent(employee -> System.out.println(employee.getName()));
-
+		employeeStream.filter(employee -> employee.getAge() > 35)
+				.findFirst()
+				.ifPresent(employee -> System.out.println(employee.getName()));
 	}
 
 	public void averageSalaryDepartment(Department department) {
