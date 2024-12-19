@@ -175,7 +175,7 @@ public class Game {
 					System.out.println("Snake became invisible");
 					break;
 				case DEACREASESIZE:
-					deceraseSize(obstacleType);
+					decreaseSnakeSize(obstacleType);
 					System.out.println("Snake size decreased");
 					break;
 				case INSTANTDEATH:
@@ -204,7 +204,7 @@ public class Game {
 		endGame();
 	}
 
-	private void deceraseSize(ObstacleType type) {
+	private void decreaseSnakeSize(ObstacleType type) {
 		snake.decreaseSize(type.getDecreaseSize());
 	}
 
