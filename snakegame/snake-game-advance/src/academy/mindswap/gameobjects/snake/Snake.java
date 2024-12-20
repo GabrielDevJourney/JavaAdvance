@@ -20,6 +20,7 @@ public class Snake {
 		initSnakeInitialSize();
 		this.direction = direction;
 		alive = true;
+		this.isIsvisible = false;
 	}
 
 	public LinkedList<Position> getFullSnake() {

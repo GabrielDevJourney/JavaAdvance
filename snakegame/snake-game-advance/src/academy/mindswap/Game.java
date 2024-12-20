@@ -17,8 +17,8 @@ public class Game {
 
 	private final Snake snake;
 	private Fruit fruit;
-	private final int GAME_AVAILABLE_HEIGHT = Field.getHeight() - 1;
-	private final int GAME_AVAILABLE_WIDTH = Field.getWidth() - 1;
+	private int GAME_AVAILABLE_HEIGHT;
+	private int GAME_AVAILABLE_WIDTH;
 	private final int CHANGE_50 = 50;
 	private final int CHANGE_75 = 75;
 	private int delay;
@@ -31,6 +31,8 @@ public class Game {
 
 	public Game(int cols, int rows, int delay) {
 		Field.init(cols, rows);
+		this.GAME_AVAILABLE_HEIGHT = Field.getHeight() - 1;
+		this.GAME_AVAILABLE_WIDTH = Field.getWidth() - 1;
 		snake = new Snake(Direction.LEFT);
 		this.delay = delay;
 		random = new Random();
@@ -68,6 +70,7 @@ public class Game {
 		Field.gameMenu();
 		Field.clearScreen();
 
+		Field.drawSnake(snake);
 		generateFruit();
 
 		while (snake.isAlive()) {
