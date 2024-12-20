@@ -90,12 +90,14 @@ public final class Field {
 
     public static void drawFruit(Fruit fruit) {
         screen.putString(fruit.getPosition().getCol(), fruit.getPosition().getRow(), FRUIT_STRING, fruit.getColor(), null);
+        screen.refresh();
     }
 
     public static void drawObstacle(Obstacle obstacle) {
         screen.putString(obstacle.getPosition().getCol(), obstacle.getPosition().getRow(), obstacle.getObstacleSymbol(),
                 obstacle.getColor(),
                 null);
+        screen.refresh();
     }
 
     public static void clearPosition(Position position) {
@@ -193,8 +195,8 @@ public final class Field {
 
     public static void clearScreen() {
         // Clear the entire screen by filling with spaces
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
+        for (int row = 0; row < getHeight(); row++) {
+            for (int col = 0; col < getWidth(); col++) {
                 screen.putString(col, row, " ", null, null);
             }
         }

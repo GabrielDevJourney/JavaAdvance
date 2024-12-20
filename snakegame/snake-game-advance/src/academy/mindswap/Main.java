@@ -11,7 +11,7 @@ public class Main {
 		int delay = 100;
 
 		while (true) {
-			Game game = new Game(gameHeight, gameWidth, delay);
+			Game game = new Game(gameWidth, gameHeight, delay);
 			try {
 				game.start();
 				if(!game.restart){
